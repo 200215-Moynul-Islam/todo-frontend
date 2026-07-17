@@ -9,6 +9,18 @@ const TaskService = {
     };
   },
 
+  // Helper function to handle 401 intercepts and common errors cleanly
+  _handleResponse(response, result, defaultMessage) {
+    if (response.status === 401) {
+      AuthService.logout(); // Automatically clears token and redirects to login.html
+      return;
+    }
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || defaultMessage);
+    }
+    return result.data;
+  },
+
   async listTasks(options = {}) {
     const url = new URL(this.BASE_URL);
 
@@ -22,10 +34,7 @@ const TaskService = {
     });
 
     const result = await response.json();
-    if (!response.ok || !result.success) {
-      throw new Error(result.message || "Failed to fetch tasks");
-    }
-    return result.data;
+    return this._handleResponse(response, result, "Failed to fetch tasks");
   },
 
   async createTask(taskData) {
@@ -36,10 +45,7 @@ const TaskService = {
     });
 
     const result = await response.json();
-    if (!response.ok || !result.success) {
-      throw new Error(result.message || "Failed to create task");
-    }
-    return result.data;
+    return this._handleResponse(response, result, "Failed to create task");
   },
 
   async getTaskById(id) {
@@ -49,10 +55,11 @@ const TaskService = {
     });
 
     const result = await response.json();
-    if (!response.ok || !result.success) {
-      throw new Error(result.message || "Failed to fetch task details");
-    }
-    return result.data;
+    return this._handleResponse(
+      response,
+      result,
+      "Failed to fetch task details"
+    );
   },
 
   async updateTask(id, updateData) {
@@ -63,10 +70,7 @@ const TaskService = {
     });
 
     const result = await response.json();
-    if (!response.ok || !result.success) {
-      throw new Error(result.message || "Failed to update task");
-    }
-    return result.data;
+    return this._handleResponse(response, result, "Failed to update task");
   },
 
   async deleteTask(id) {
@@ -76,12 +80,9 @@ const TaskService = {
     });
 
     const result = await response.json();
-    if (!response.ok || !result.success) {
-      throw new Error(result.message || "Failed to delete task");
-    }
-    return result.data;
+    return this._handleResponse(response, result, "Failed to delete task");
   },
-  
+
   async generateDescription(title) {
     const response = await fetch(`${this.BASE_URL}/generate-description`, {
       method: "POST",
@@ -90,9 +91,10 @@ const TaskService = {
     });
 
     const result = await response.json();
-    if (!response.ok || !result.success) {
-      throw new Error(result.message || "Failed to generate description");
-    }
-    return result.data;
+    return this._handleResponse(
+      response,
+      result,
+      "Failed to generate description"
+    );
   },
 };
