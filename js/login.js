@@ -1,3 +1,4 @@
+// Password Visibility Toggle Logic
 document
   .getElementById("togglePassword")
   .addEventListener("click", function () {
@@ -19,6 +20,7 @@ document
     }
   });
 
+  // Registration Processing Logic
 document
   .getElementById("loginForm")
   .addEventListener("submit", async function (event) {
@@ -30,16 +32,18 @@ document
     const emailError = document.getElementById("emailError");
     const passwordError = document.getElementById("passwordError");
 
+    // Clean form values
     const email = emailInput.trim().toLowerCase();
     const password = passwordInput;
 
+    // Clear previous execution error messages
     emailError.textContent = "";
     emailError.style.display = "none";
     passwordError.textContent = "";
     passwordError.style.display = "none";
 
     let isFormValid = true;
-
+    // Validate email
     if (email === "") {
       emailError.textContent = "Email is required";
       emailError.style.display = "block";
@@ -53,6 +57,7 @@ document
       }
     }
 
+    // Validate password
     if (password === "") {
       passwordError.textContent = "Password is required";
       passwordError.style.display = "block";
