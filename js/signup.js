@@ -20,29 +20,42 @@ document
     }
   });
 
-  // Registration Processing Logic
+// Registration Processing Logic
 document
-  .getElementById("loginForm")
+  .getElementById("signupForm")
   .addEventListener("submit", async function (event) {
     event.preventDefault();
 
+    const nameInput = document.getElementById("name").value;
     const emailInput = document.getElementById("email").value;
     const passwordInput = document.getElementById("password").value;
 
+    const nameError = document.getElementById("nameError");
     const emailError = document.getElementById("emailError");
     const passwordError = document.getElementById("passwordError");
 
     // Clean form values
+    const name = nameInput.trim();
     const email = emailInput.trim().toLowerCase();
     const password = passwordInput;
 
     // Clear previous execution error messages
+    nameError.textContent = "";
+    nameError.style.display = "none";
     emailError.textContent = "";
     emailError.style.display = "none";
     passwordError.textContent = "";
     passwordError.style.display = "none";
 
     let isFormValid = true;
+
+    // Validate name
+    if (name === "") {
+      nameError.textContent = "Name is required";
+      nameError.style.display = "block";
+      isFormValid = false;
+    }
+
     // Validate email
     if (email === "") {
       emailError.textContent = "Email is required";
@@ -62,8 +75,8 @@ document
       passwordError.textContent = "Password is required";
       passwordError.style.display = "block";
       isFormValid = false;
-    } else if (password.length < 6) {
-      passwordError.textContent = "Password must be at least 6 characters";
+    } else if (password.length <= 6) {
+      passwordError.textContent = "Password must be greater than 6 characters";
       passwordError.style.display = "block";
       isFormValid = false;
     }
@@ -71,7 +84,8 @@ document
     if (!isFormValid) return;
 
     try {
-      await AuthService.login(email, password);
+      await AuthService.register(name, email, password);
+      await AuthService.login(email, password); // Log in the user after successful registration
       window.location.href = "index.html";
     } catch (error) {
       passwordError.textContent = error.message;
