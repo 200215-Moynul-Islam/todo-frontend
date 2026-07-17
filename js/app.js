@@ -72,6 +72,12 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="task-controls">
           <span class="status-badge ${task.status}">${task.status}</span>
           <div class="action-buttons">
+            <button class="icon-btn edit" title="Edit Task">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"></path>
+              </svg>
+            </button>
             <button class="icon-btn delete" data-id="${
               task.id
             }" title="Delete Task">
@@ -91,6 +97,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const deleteBtn = cardElement.querySelector(".icon-btn.delete");
       deleteBtn.addEventListener("click", () => handleDeleteTask(task.id));
+
+      const editBtn = cardElement.querySelector(".icon-btn.edit");
+      editBtn.addEventListener("click", () => {
+        cardElement.innerHTML = `
+          <div class="task-main" style="width: 100%; display: flex; flex-direction: column; gap: 8px;">
+            <input type="text" class="form-input edit-title-input" value="${taskTitle}" style="padding: 6px 10px;" />
+            <textarea class="form-input form-textarea edit-desc-input" rows="2" style="padding: 6px 10px;">${taskDesc}</textarea>
+          </div>
+          <div class="task-controls" style="justify-content: center; height: 100%;">
+            <div class="action-buttons" style="flex-direction: column; gap: 6px;">
+              <button class="icon-btn save-inline" title="Save Changes" style="padding: 4px 8px; font-size: 0.75rem; font-weight: bold; background-color: #f0fdf4; color: #16a34a; border-color: #bbf7d0;">Save</button>
+              <button class="icon-btn cancel-inline" title="Cancel Editing" style="padding: 4px 8px; font-size: 0.75rem; font-weight: bold; background-color: #f1f5f9; color: #64748b;">Cancel</button>
+            </div>
+          </div>
+        `;
+
+        const titleInput = cardElement.querySelector(".edit-title-input");
+        const descInput = cardElement.querySelector(".edit-desc-input");
+        titleInput.focus();
+
+        cardElement
+          .querySelector(".save-inline")
+          .addEventListener("click", async () => {
+            const updatedTitle = titleInput.value.trim();
+            if (!updatedTitle) {
+              alert("Task title cannot be empty.");
+              return;
+            }
+            try {
+              await TaskService.updateTask(task.id, {
+                title: updatedTitle,
+                description: descInput.value.trim(),
+                status: task.status,
+              });
+              loadWorkspaceFeed();
+            } catch (error) {
+              alert("Failed to update task: " + error.message);
+            }
+          });
+
+        cardElement
+          .querySelector(".cancel-inline")
+          .addEventListener("click", () => {
+            loadWorkspaceFeed();
+          });
+      });
 
       taskContainer.appendChild(cardElement);
     });
