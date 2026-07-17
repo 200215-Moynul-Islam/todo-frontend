@@ -1,0 +1,90 @@
+/* VARIABLES */
+:root {
+  /* Brand Colors*/
+  --color-primary: #118cff;
+  --color-secondary: #e3fffb;
+  --color-text-dark: #2d3748;
+  --color-text-light: #f7fafc;
+  --color-bg-light: #fcfbfa;
+  --color-bg-gray: #f0f5f8;
+  --color-border: #e2e8f0;
+
+  /* Typography */
+  --font-heading: "Playfair Display", Georgia, serif;
+  --font-body: "Montserrat", Arial, sans-serif;
+
+  /* Spacing System */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-xxl: 3rem;
+}
+
+/* RESET AND NORMALIZATION */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--color-bg-light);
+  color: var(--color-text-dark);
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+img,
+picture,
+video,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--space-md);
+}
+
+p {
+  margin-bottom: var(--space-md);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  opacity: 0.9;
+}
